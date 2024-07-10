@@ -1,52 +1,57 @@
-import {React, useRef, useState} from 'react'
-import './todo-field.css';
+import { React, useRef, useState } from "react";
+import "./todo-field.css";
+import { useDispatch } from "react-redux";
 
-const TodoField = () =>{
+const TodoField = ({ text, id }) => {
+  const [disabled, setDisabled] = useState(false);
+  const [fieldValue, setFieldValue] = useState(text);
+  const inputRef = useRef(null);
 
-const [disabled, setDisabled] = useState(false)
-const [fieldValue, setFieldValue] = useState('Помыть кота')
-const inputRef = useRef(null);
+  const dispatch = useDispatch();
 
-const showInput = () =>{
-    setDisabled(prev => !prev)
+  const deleteTodo = () => {
+    dispatch({ type: "DELETE_TODO", id: id });
+  };
+
+  const showInput = () => {
+    setDisabled((prev) => !prev);
     setTimeout(() => {
-        inputRef.current.focus()
-    },100)
-}
+      inputRef.current.focus();
+    }, 100);
+  };
 
-const changeField = (e) =>{
-    setFieldValue(e.target.value)
-}
+  const changeField = (e) => {
+    setFieldValue(e.target.value);
+  };
 
-const keyDownField = (e) =>{
-    if(e.key === 'Enter'){
-        inputRef.current.blur()
+  const keyDownField = (e) => {
+    if (e.key === "Enter") {
+      inputRef.current.blur();
     }
-}
+  };
 
-return(
-    <div className='fieldWraper'>
-    {disabled?
-        <input 
-            value = {fieldValue} 
-            className = 'toDoField' 
-            onBlur = {() => setDisabled(prev =>!prev)} 
-            onChange={changeField}
-            onKeyDown={keyDownField}
-            ref = {inputRef}
-            
-            
-            
+  return (
+    <div className="fieldWraper">
+      {disabled ? (
+        <input
+          value={fieldValue}
+          className="toDoField"
+          onBlur={() => setDisabled((prev) => !prev)}
+          onChange={changeField}
+          onKeyDown={keyDownField}
+          ref={inputRef}
         />
-        :
-        
-        <span className= "toDoPharagraph" onClick={showInput}>{fieldValue}</span>
-    } 
-        <button className='delBtn'>🗑️</button>
-        <button className='complitedBtn'>✔️</button>
+      ) : (
+        <span className="toDoPharagraph" onClick={showInput}>
+          {fieldValue}
+        </span>
+      )}
+      <button className="delBtn" onClick={deleteTodo}>
+        🗑️
+      </button>
+      <button className="complitedBtn">✔️</button>
     </div>
-)
+  );
+};
 
-}
-
-export default TodoField
+export default TodoField;
