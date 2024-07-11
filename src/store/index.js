@@ -6,7 +6,7 @@ const defaultState = [
   {
     id: countId++,
     text: "Помыть кота",
-    done: false,
+    status: true,
   },
 ];
 
@@ -18,11 +18,13 @@ const todoReducer = (state = defaultState, action) => {
         {
           id: countId++,
           text: action.text,
-          done: false,
+          status: false,
         },
       ];
     case "DELETE_TODO":
       return state.filter((todo) => todo.id !== action.id);
+    case "CHANGE_DONE":
+
     default:
       return state;
   }
